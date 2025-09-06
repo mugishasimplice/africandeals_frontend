@@ -1,0 +1,70 @@
+      // Close Support Modal
+      function closeSupportModal() {
+        document.getElementById('support-modal').classList.add('hidden');
+      }
+
+      // Helper function to get order status class
+      function getOrderStatusClass(status) {
+        switch (status) {
+          case 'pending': return 'bg-yellow-100 text-yellow-800';
+          case 'confirmed': return 'bg-green-100 text-green-800';
+          case 'processing': return 'bg-blue-100 text-blue-800';
+          case 'delivered': return 'bg-purple-100 text-purple-800';
+          case 'cancelled': return 'bg-red-100 text-red-800';
+          default: return 'bg-gray-100 text-gray-800';
+        }
+      }
+
+      // View order details
+      function viewOrderDetails(orderId) {
+        // TODO: Implement order details view
+        showToast('Order details coming soon', 'info');
+      }
+
+      // Track order
+      function trackOrder(orderId) {
+        // TODO: Implement order tracking
+        showToast('Order tracking coming soon', 'info');
+      }
+
+      // Update profile function
+      async function updateProfile() {
+        const name = document.getElementById('profile-name')?.value;
+        const email = document.getElementById('profile-email')?.value;
+        const phone = document.getElementById('profile-phone')?.value;
+        const address = document.getElementById('profile-address')?.value;
+
+        if (!name || !email) {
+          showToast('Name and email are required', 'error');
+          return;
+        }
+
+        try {
+          const token = getAuthToken();
+          const response = await fetch('/api/users/profile', {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ full_name: name, email, phone, address })
+          });
+
+          const result = await response.json();
+          
+          if (result.success) {
+            showToast('Profile updated successfully!', 'success');
+            // Refresh profile data
+            loadProfileIntoPanel();
+          } else {
+            showToast(result.message || 'Failed to update profile', 'error');
+          }
+        } catch (error) {
+          console.error('Error updating profile:', error);
+          showToast('Error updating profile', 'error');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
